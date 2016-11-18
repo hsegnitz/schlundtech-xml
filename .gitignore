@@ -1,0 +1,7 @@
+.idea
+build/api
+build/phpdox
+build/pdepend
+build/coverage
+build/logs
+vendor
