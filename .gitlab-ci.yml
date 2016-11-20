@@ -1,0 +1,215 @@
+stages:
+- build
+- lint
+- test
+- deploy
+
+composer:
+  stage: build
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    untracked: true
+    expire_in: "2 days"
+    paths:
+    - vendor/
+  tags:
+  - composer
+  only:
+  - develop
+  - master
+  - /^release\/.*$/
+  - /^feature\/.*$/
+  - /^hotfix\/.*$/
+  - /^bugfix\/.*$/
+  script:
+  - "make composer-version"
+  - "make composer-install"
+  - "make composer-autoload"
+
+lint:
+  stage: lint
+  dependencies:
+  - composer
+  tags:
+  - test
+  only:
+  - develop
+  - master
+  - /^release\/.*$/
+  - /^feature\/.*$/
+  - /^hotfix\/.*$/
+  - /^bugfix\/.*$/
+  script:
+  - make lint
+
+phpunit-no-coverage:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/logs/junit.xml
+    expire_in: "1 week"
+  tags:
+  - xdebug
+  - test
+  only:
+  - /^release\/.*$/
+  - /^feature\/.*$/
+  - /^hotfix\/.*$/
+  - /^bugfix\/.*$/
+  script:
+    - make phpunit-no-coverage
+
+phploc:
+  stage: test
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/logs/phploc.*
+    expire_in: "2 weeks"
+  dependencies:
+  - composer
+  only:
+  - develop
+  - master
+  tags:
+  - test
+  script:
+  - make phploc
+
+pdepend:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/pdepend/
+    - build/logs/jdepend.xml
+    - build/logs/pdepend.xml
+    expire_in: "2 weeks"
+  only:
+  - develop
+  - master
+  tags:
+  - test
+  script:
+  - make pdepend
+
+phpmd:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/logs/pmd.xml
+    expire_in: "2 weeks"
+  only:
+  - develop
+  - master
+  tags:
+  - test
+  script:
+  - make phpmd
+
+phpcs:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/logs/checkstyle.xml
+    expire_in: "2 weeks"
+  only:
+  - develop
+  - master
+  tags:
+  - test
+  script:
+  - make phpcs
+
+phpcpd:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/logs/pmd-cpd.xml
+    expire_in: "2 weeks"
+  only:
+  - develop
+  - master
+  tags:
+  - test
+  script:
+  - make phpcpd
+
+phpunit:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/logs/junit.xml
+    - build/logs/clover.xml
+    - build/logs/crap4j.xml
+    - build/coverage/
+    expire_in: "2 weeks"
+  tags:
+  - xdebug
+  - test
+  only:
+  - develop
+  - master
+  script:
+    - make phpunit
+
+phpdox:
+  stage: test
+  dependencies:
+  - composer
+  artifacts:
+    name: "$CI_BUILD_NAME"
+    paths:
+    - build/api
+    - build/phpdox
+    expire_in: "2 weeks"
+  only:
+  - develop
+  - master
+  tags:
+  - test
+  script:
+  - make phpdox
+
+copy-metrics:
+  stage: deploy
+  dependencies:
+  - composer
+  - lint
+  - phploc
+  - pdepend
+  - phpmd
+  - phpcpd
+  - phpcs
+  - phpunit
+  - phpdox
+  script:
+  - mkdir -p --mode=777 "/var/multi_backup/gitlab-stats/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_BUILD_REF_NAME/$CI_PIPELINE_ID"
+  - cp -R build/* "/var/multi_backup/gitlab-stats/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_BUILD_REF_NAME/$CI_PIPELINE_ID"
+  only:
+  - develop
+  - master
+  tags:
+  - deploy
+  - stats
+  when: always
+  environment: statistics
+
+# add some deployment stuff for packagist.org or similar later.
