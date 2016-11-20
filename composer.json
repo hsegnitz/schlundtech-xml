@@ -1,0 +1,33 @@
+{
+  "name": "hsegnitz/schlundtech-xml",
+  "description": "Inofficial Client for Schlundtech XML API",
+  "license": "proprietary",
+  "type" : "project",
+  "authors": [
+    {
+      "name": "Holger Segnitz",
+      "email": "holger@segnitz.net"
+    }
+  ],
+  "repositories": [],
+  "require": {
+    "php": ">=5.4,<8.0-DEV"
+  },
+  "autoload": {
+    "psr-4": {
+      "SchlundtechXML\\": "src/SchlundtechXML/"
+    }
+  },
+  "include-path": [
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "jakub-onderka/php-parallel-lint": "*",
+    "phploc/phploc": "*",
+    "pdepend/pdepend": "*",
+    "phpmd/phpmd": "*",
+    "squizlabs/php_codesniffer": "*",
+    "sebastian/phpcpd": "*",
+    "theseer/phpdox": "*"
+  }
+}
