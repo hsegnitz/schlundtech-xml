@@ -22,7 +22,7 @@
 
     <testsuites>
         <testsuite name="unittests">
-            <file>../tests/PhpUnit_UnitTests/TestSuite.php</file>
+            <file>../tests/PhpUnit/UnitTests/TestSuite.php</file>
         </testsuite>
     </testsuites>
 
