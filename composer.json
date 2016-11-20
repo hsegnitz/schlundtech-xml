@@ -1,14 +1,25 @@
 {
   "name": "hsegnitz/schlundtech-xml",
   "description": "Inofficial Client for Schlundtech XML API",
-  "license": "proprietary",
-  "type" : "project",
+  "keywords": ["SchlundTech", "XML", "API", "SDK", "DNS"],
+  "homepage": "https://github.com/hsegnitz/schlundtech-xml",
+  "license": "Apache-2.0",
+  "type" : "library",
   "authors": [
     {
       "name": "Holger Segnitz",
-      "email": "holger@segnitz.net"
+      "email": "holger@segnitz.net",
+      "homepage": "https://www.segnitz.net/",
+      "role": "Developer"
     }
   ],
+  "support": {
+    "issues": "https://github.com/hsegnitz/schlundtech-xml/issues",
+    "forum":  "https://github.com/hsegnitz/schlundtech-xml/issues",
+    "wiki":   "https://github.com/hsegnitz/schlundtech-xml/wiki",
+    "source": "https://github.com/hsegnitz/schlundtech-xml",
+    "docs":   "https://github.com/hsegnitz/schlundtech-xml/wiki"
+  },
   "repositories": [],
   "require": {
     "php": ">=5.4,<8.0-DEV"
@@ -18,8 +29,6 @@
       "SchlundtechXML\\": "src/SchlundtechXML/"
     }
   },
-  "include-path": [
-  ],
   "require-dev": {
     "phpunit/phpunit": "*",
     "jakub-onderka/php-parallel-lint": "*",
