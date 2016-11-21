@@ -15,13 +15,16 @@ class Container
 	/** @var string */
 	protected $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<nothing>
-</nothing>
+<overwrite_me>
+</overwrite_me>
 XML;
 
 	/** @var \SimpleXMLElement */
 	protected $simpleXMl;
 
+	/**
+	 * Container constructor.
+	 */
 	public function __construct()
 	{
 		$this->simpleXMl = simplexml_load_string($this->xml);
@@ -32,7 +35,12 @@ XML;
 	 */
 	public function render()
 	{
-		return $this->xml;
+		$xml = $this->simpleXMl->asXML();
+		if (! $this->isRoot) {
+			return preg_replace('/<\?.*\?>/', '', $xml);
+		}
+		//@todo remove empty elements
+		return $xml;
 	}
 
 	/**
@@ -48,11 +56,7 @@ XML;
 	 */
 	public function __toString()
 	{
-		$xml = $this->simpleXMl->asXML();
-		if (! $this->isRoot) {
-			return preg_replace('/<\?.*\?>/', '', $xml);
-		}
-		return $xml;
+		return $this->render();
 	}
 }
 
