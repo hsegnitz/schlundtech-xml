@@ -7,6 +7,7 @@ class XmlContainerTest extends TestCase
 	public function testRootElementHasXMLHeader()
 	{
 		$rootElement = new RootElement();
+
 		$xml = $rootElement->render();
 
 		$this->assertStringStartsWith("<?xml ", $xml);
@@ -15,16 +16,16 @@ class XmlContainerTest extends TestCase
 	public function testSubStructures()
 	{
 		$rootElement = new RootElement();
+
 		$sub = new ChildStructure();
 		$sub->setKey1('asdf');
 		$sub->setKey2('jkloe');
-
 		$rootElement->setChildStructure($sub);
 
-		$xml = (string)$rootElement;
+		$xml  = (string)$rootElement;
 		$sXml = simplexml_load_string($xml);
 
-		$this->assertEquals('asdf', $sXml->childStructure->key1);
+		$this->assertEquals('asdf',  $sXml->childStructure->key1);
 		$this->assertEquals('jkloe', $sXml->childStructure->key2);
 	}
 }
